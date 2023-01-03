@@ -9,7 +9,7 @@ import com.assignment.storemanagementtool.exception.OrderNotFoundException;
 import com.assignment.storemanagementtool.exception.OutOfStockException;
 import com.assignment.storemanagementtool.exception.ProductNotFoundException;
 import com.assignment.storemanagementtool.mapper.OrderMapper;
-import com.assignment.storemanagementtool.mapper.UserMapper;
+import com.assignment.storemanagementtool.mapper.BuyerMapper;
 import com.assignment.storemanagementtool.repository.OrderRepository;
 import com.assignment.storemanagementtool.repository.ProductStockRepository;
 import lombok.AllArgsConstructor;
@@ -55,7 +55,7 @@ public class OrderService {
   }
 
   public List<Order> findUserOrders(UserDTO userDTO) {
-    return orderRepository.findByUser(UserMapper.mapDtoToEntity(userDTO));
+    return orderRepository.findByBuyer(BuyerMapper.mapDtoToEntity(userDTO));
   }
 
   public void deleteOrderById(Long id) {
@@ -63,6 +63,6 @@ public class OrderService {
   }
 
   public void deleteUserOrders(UserDTO userDTO) {
-    orderRepository.deleteByUser(UserMapper.mapDtoToEntity(userDTO));
+    orderRepository.deleteByBuyer(BuyerMapper.mapDtoToEntity(userDTO));
   }
 }

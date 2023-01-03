@@ -3,10 +3,10 @@ package com.assignment.storemanagementtool;
 import com.assignment.storemanagementtool.dto.OrderDTO;
 import com.assignment.storemanagementtool.dto.ProductDTO;
 import com.assignment.storemanagementtool.dto.UserDTO;
+import com.assignment.storemanagementtool.entity.Buyer;
 import com.assignment.storemanagementtool.entity.Order;
 import com.assignment.storemanagementtool.entity.Product;
 import com.assignment.storemanagementtool.entity.ProductStock;
-import com.assignment.storemanagementtool.entity.User;
 import com.assignment.storemanagementtool.exception.OrderNotFoundException;
 import com.assignment.storemanagementtool.exception.OutOfStockException;
 import com.assignment.storemanagementtool.repository.OrderRepository;
@@ -168,8 +168,8 @@ public class OrderServiceTest {
   @Test
   public void should_find_user_orders() {
 
-    User user = new User();
-    user.setId(1L);
+    Buyer buyer = new Buyer();
+    buyer.setId(1L);
 
     Order order = new Order();
     order.setId(1L);
@@ -183,7 +183,7 @@ public class OrderServiceTest {
     UserDTO userDTO = new UserDTO();
     userDTO.setId(1L);
 
-    when(orderRepository.findByUser(user)).thenReturn(List.of(order));
+    when(orderRepository.findByBuyer(buyer)).thenReturn(List.of(order));
 
     List<Order> userOrders = systemUnderTest.findUserOrders(userDTO);
     assertEquals(1, userOrders.get(0).getProducts().size());
@@ -204,10 +204,10 @@ public class OrderServiceTest {
     UserDTO userDTO = new UserDTO();
     userDTO.setId(1L);
 
-    User user = new User();
-    user.setId(1L);
+    Buyer buyer = new Buyer();
+    buyer.setId(1L);
 
     systemUnderTest.deleteUserOrders(userDTO);
-    verify(orderRepository).deleteByUser(user);
+    verify(orderRepository).deleteByBuyer(buyer);
   }
 }

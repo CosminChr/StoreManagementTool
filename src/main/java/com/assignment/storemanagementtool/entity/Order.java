@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,6 +25,7 @@ import java.util.List;
 @NoArgsConstructor
 @ToString
 @Entity
+@Table(name = "buyer_order")
 public class Order {
 
   @Id
@@ -34,6 +36,6 @@ public class Order {
   @OneToMany(mappedBy = "order")
   private List<Product> products = new ArrayList<>();
   @ManyToOne
-  @JoinColumn(name="user_id")
-  private User user;
+  @JoinColumn(name="buyer_id")
+  private Buyer buyer;
 }

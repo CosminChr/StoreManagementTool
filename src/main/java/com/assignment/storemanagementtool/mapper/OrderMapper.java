@@ -13,7 +13,7 @@ public class OrderMapper {
     Order order = new Order();
     order.setOrderTime(LocalDateTime.now());
     order.setProducts(orderDTO.getProducts().stream().map(ProductMapper::mapDtoToEntity).collect(Collectors.toList()));
-    order.setUser(UserMapper.mapDtoToEntity(orderDTO.getUser()));
+    order.setBuyer(BuyerMapper.mapDtoToEntity(orderDTO.getUser()));
     return order;
   }
 }
