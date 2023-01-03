@@ -8,6 +8,8 @@ import com.assignment.storemanagementtool.entity.ProductStock;
 import com.assignment.storemanagementtool.exception.OrderNotFoundException;
 import com.assignment.storemanagementtool.exception.OutOfStockException;
 import com.assignment.storemanagementtool.exception.ProductNotFoundException;
+import com.assignment.storemanagementtool.mapper.OrderMapper;
+import com.assignment.storemanagementtool.mapper.UserMapper;
 import com.assignment.storemanagementtool.repository.OrderRepository;
 import com.assignment.storemanagementtool.repository.ProductStockRepository;
 import lombok.AllArgsConstructor;
@@ -23,27 +25,44 @@ public class OrderService {
   private ProductStockRepository productStockRepository;
 
   public Order createOrder(OrderDTO orderDTO) {
-  return null;
+    for (ProductDTO product : orderDTO.getProducts()) {
+      ProductStock productStock = productStockRepository.findByName(product.getName())
+          .orElseThrow(() -> new ProductNotFoundException(String.format("The product with name %s was not found", product.getName())));
+      if (productStock.getQuantity() < product.getQuantity()) {
+        throw new OutOfStockException(String.format("The order could not be created because the product %s is out of stock", product.getName()));
+      }
+    }
+    return orderRepository.save(OrderMapper.mapDtoToEntity(orderDTO));
   }
 
   public Order updateOrder(OrderDTO orderDTO) {
+    Order orderToUpdate = orderRepository.findById(orderDTO.getId())
+        .orElseThrow(() -> new OrderNotFoundException(String.format("The order with id %s does not exist", orderDTO.getId())));
+    for (ProductDTO product : orderDTO.getProducts()) {
+      ProductStock productStock = productStockRepository.findByName(product.getName())
+          .orElseThrow(() -> new ProductNotFoundException(String.format("The product with name %s was not found", product)));
+      if (productStock.getQuantity() < product.getQuantity()) {
+        throw new OutOfStockException(String.format("The order could not be updated because the product %s is out of stock", product.getName()));
+      }
+    }
 
-    return null;
+    return orderRepository.save(orderToUpdate);
   }
 
   public Order findOrderById(Long id) {
-    return null;
+    return orderRepository.findById(id)
+        .orElseThrow(() -> new OrderNotFoundException(String.format("The order with id %s does not exist", id)));
   }
 
   public List<Order> findUserOrders(UserDTO userDTO) {
-    return null;
+    return orderRepository.findByUser(UserMapper.mapDtoToEntity(userDTO));
   }
 
   public void deleteOrderById(Long id) {
-
+    orderRepository.deleteById(id);
   }
 
   public void deleteUserOrders(UserDTO userDTO) {
-
+    orderRepository.deleteByUser(UserMapper.mapDtoToEntity(userDTO));
   }
 }
