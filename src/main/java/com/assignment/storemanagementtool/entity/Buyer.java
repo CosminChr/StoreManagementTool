@@ -64,7 +64,7 @@ public class Buyer implements UserDetails {
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return List.of(() -> "read", () -> "write");
+    return List.of(() -> "ROLE_BUYER");
   }
 
   @Override
