@@ -2,7 +2,7 @@ package com.assignment.storemanagementtool.service;
 
 import com.assignment.storemanagementtool.dto.OrderDTO;
 import com.assignment.storemanagementtool.dto.ProductDTO;
-import com.assignment.storemanagementtool.dto.UserDTO;
+import com.assignment.storemanagementtool.dto.BuyerDTO;
 import com.assignment.storemanagementtool.entity.Order;
 import com.assignment.storemanagementtool.entity.ProductStock;
 import com.assignment.storemanagementtool.exception.OrderNotFoundException;
@@ -54,15 +54,15 @@ public class OrderService {
         .orElseThrow(() -> new OrderNotFoundException(String.format("The order with id %s does not exist", id)));
   }
 
-  public List<Order> findUserOrders(UserDTO userDTO) {
-    return orderRepository.findByBuyer(BuyerMapper.mapDtoToEntity(userDTO));
+  public List<Order> findUserOrders(BuyerDTO buyerDTO) {
+    return orderRepository.findByBuyer(BuyerMapper.mapDtoToEntity(buyerDTO));
   }
 
   public void deleteOrderById(Long id) {
     orderRepository.deleteById(id);
   }
 
-  public void deleteUserOrders(UserDTO userDTO) {
-    orderRepository.deleteByBuyer(BuyerMapper.mapDtoToEntity(userDTO));
+  public void deleteUserOrders(BuyerDTO buyerDTO) {
+    orderRepository.deleteByBuyer(BuyerMapper.mapDtoToEntity(buyerDTO));
   }
 }

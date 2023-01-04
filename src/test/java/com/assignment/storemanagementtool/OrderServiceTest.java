@@ -2,7 +2,7 @@ package com.assignment.storemanagementtool;
 
 import com.assignment.storemanagementtool.dto.OrderDTO;
 import com.assignment.storemanagementtool.dto.ProductDTO;
-import com.assignment.storemanagementtool.dto.UserDTO;
+import com.assignment.storemanagementtool.dto.BuyerDTO;
 import com.assignment.storemanagementtool.entity.Buyer;
 import com.assignment.storemanagementtool.entity.Order;
 import com.assignment.storemanagementtool.entity.Product;
@@ -49,8 +49,8 @@ public class OrderServiceTest {
     productDTO.setName("milk");
     productDTO.setQuantity(1);
     orderDTO.setProducts(List.of(productDTO));
-    UserDTO userDTO = new UserDTO();
-    orderDTO.setUser(userDTO);
+    BuyerDTO buyerDTO = new BuyerDTO();
+    orderDTO.setUser(buyerDTO);
 
     Order order = new Order();
     order.setId(1L);
@@ -180,12 +180,12 @@ public class OrderServiceTest {
     product.setQuantity(1);
     order.setProducts(List.of(product));
 
-    UserDTO userDTO = new UserDTO();
-    userDTO.setId(1L);
+    BuyerDTO buyerDTO = new BuyerDTO();
+    buyerDTO.setId(1L);
 
     when(orderRepository.findByBuyer(buyer)).thenReturn(List.of(order));
 
-    List<Order> userOrders = systemUnderTest.findUserOrders(userDTO);
+    List<Order> userOrders = systemUnderTest.findUserOrders(buyerDTO);
     assertEquals(1, userOrders.get(0).getProducts().size());
     assertEquals("milk", userOrders.get(0).getProducts().get(0).getName());
     assertEquals(1, userOrders.get(0).getProducts().get(0).getQuantity());
@@ -201,13 +201,13 @@ public class OrderServiceTest {
 
   @Test
   public void should_delete_user_orders() {
-    UserDTO userDTO = new UserDTO();
-    userDTO.setId(1L);
+    BuyerDTO buyerDTO = new BuyerDTO();
+    buyerDTO.setId(1L);
 
     Buyer buyer = new Buyer();
     buyer.setId(1L);
 
-    systemUnderTest.deleteUserOrders(userDTO);
+    systemUnderTest.deleteUserOrders(buyerDTO);
     verify(orderRepository).deleteByBuyer(buyer);
   }
 }

@@ -1,19 +1,18 @@
 package com.assignment.storemanagementtool.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 
 @EqualsAndHashCode
@@ -29,7 +28,7 @@ public class Buyer implements UserDetails {
   @Column(name = "last_name")
   private String lastName;
   private String email;
-  private char [] password;
+  private String  password;
 
   public Long getId() {
     return id;
@@ -70,16 +69,16 @@ public class Buyer implements UserDetails {
 
   @Override
   public String getPassword() {
-    return Arrays.toString(password);
+    return password;
   }
 
-  public void setPassword(char[] password) {
+  public void setPassword(String password) {
     this.password = password;
   }
 
   @Override
   public String getUsername() {
-    return String.join(" ", firstName, lastName);
+    return String.join("", firstName, lastName);
   }
 
   @Override

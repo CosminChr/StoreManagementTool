@@ -14,5 +14,5 @@ public class OrderDTO {
   private Long id;
   private LocalDateTime orderTime;
   private List<ProductDTO> products = new ArrayList<>();
-  private UserDTO user;
+  private BuyerDTO user;
 }
