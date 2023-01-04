@@ -3,11 +3,11 @@ package com.assignment.storemanagementtool.controller;
 import com.assignment.storemanagementtool.dto.OrderDTO;
 import com.assignment.storemanagementtool.service.OrderService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,12 +23,12 @@ public class BuyerOrderController {
   private OrderService orderService;
 
   @PostMapping("/")
-  public OrderDTO createOrder(@RequestBody OrderDTO orderDTO, Authentication auth) {
-    return orderService.createOrder(orderDTO, auth);
+  public ResponseEntity<OrderDTO> createOrder(@RequestBody OrderDTO orderDTO, Authentication auth) {
+    return ResponseEntity.status(201).body(orderService.createOrder(orderDTO, auth));
   }
 
   @GetMapping("/")
-  public List<OrderDTO> findUserOrders(Authentication auth) {
-    return orderService.findUserOrders(auth);
+  public ResponseEntity<List<OrderDTO>> findUserOrders(Authentication auth) {
+    return ResponseEntity.ok(orderService.findUserOrders(auth));
   }
 }
