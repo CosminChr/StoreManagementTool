@@ -28,7 +28,7 @@ public class Buyer implements UserDetails {
   @Column(name = "last_name")
   private String lastName;
   private String email;
-  private String  password;
+  private String password;
 
   public Long getId() {
     return id;

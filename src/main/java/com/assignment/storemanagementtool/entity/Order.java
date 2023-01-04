@@ -1,5 +1,6 @@
 package com.assignment.storemanagementtool.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,6 +10,7 @@ import lombok.ToString;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -33,7 +35,8 @@ public class Order {
   private Long id;
   @Column(name = "order_time")
   private LocalDateTime orderTime;
-  @OneToMany(mappedBy = "order")
+  @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+  @JsonManagedReference
   private List<Product> products = new ArrayList<>();
   @ManyToOne
   @JoinColumn(name="buyer_id")
