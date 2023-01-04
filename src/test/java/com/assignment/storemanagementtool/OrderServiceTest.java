@@ -12,12 +12,14 @@ import com.assignment.storemanagementtool.exception.OutOfStockException;
 import com.assignment.storemanagementtool.repository.OrderRepository;
 import com.assignment.storemanagementtool.repository.ProductStockRepository;
 
+import com.assignment.storemanagementtool.service.BuyerService;
 import com.assignment.storemanagementtool.service.OrderService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.Authentication;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -39,6 +41,10 @@ public class OrderServiceTest {
   private OrderRepository orderRepository;
   @Mock
   private ProductStockRepository productStockRepository;
+  @Mock
+  private BuyerService buyerService;
+  @Mock
+  private Authentication authentication;
 
   @Test
   public void should_create_order() {
@@ -49,8 +55,10 @@ public class OrderServiceTest {
     productDTO.setName("milk");
     productDTO.setQuantity(1);
     orderDTO.setProducts(List.of(productDTO));
-    BuyerDTO buyerDTO = new BuyerDTO();
-    orderDTO.setUser(buyerDTO);
+
+    Buyer buyer = new Buyer();
+    buyer.setFirstName("Cosmin");
+    buyer.setLastName("Chiriac");
 
     Order order = new Order();
     order.setId(1L);
@@ -60,6 +68,7 @@ public class OrderServiceTest {
     product.setName("milk");
     product.setQuantity(1);
     order.setProducts(List.of(product));
+    order.setBuyer(buyer);
 
     ProductStock productStock = new ProductStock();
     productStock.setId(1L);
@@ -68,8 +77,9 @@ public class OrderServiceTest {
 
     when(productStockRepository.findByName("milk")).thenReturn(Optional.of(productStock));
     when(orderRepository.save(any())).thenReturn(order);
+    when(buyerService.findBuyerById(any())).thenReturn(buyer);
 
-    Order createdOrder = systemUnderTest.createOrder(orderDTO);
+    OrderDTO createdOrder = systemUnderTest.createOrder(orderDTO, authentication);
 
     assertEquals(1, createdOrder.getProducts().size());
     assertEquals("milk", createdOrder.getProducts().get(0).getName());
@@ -94,7 +104,7 @@ public class OrderServiceTest {
 
     when(productStockRepository.findByName("milk")).thenReturn(Optional.of(productStock));
 
-    Throwable exception = assertThrows(OutOfStockException.class, () -> systemUnderTest.createOrder(orderDTO));
+    Throwable exception = assertThrows(OutOfStockException.class, () -> systemUnderTest.createOrder(orderDTO, authentication));
     assertEquals(String.format("The order could not be created because the product %s is out of stock", "milk"), exception.getMessage());
   }
 
@@ -127,7 +137,7 @@ public class OrderServiceTest {
     order.getProducts().get(0).setQuantity(2);
     order.getProducts().get(0).setPrice(BigDecimal.valueOf(200));
     when(orderRepository.save(any())).thenReturn(order);
-    Order updatedOrder = systemUnderTest.updateOrder(orderDTO);
+    OrderDTO updatedOrder = systemUnderTest.updateOrder(orderDTO);
 
     assertEquals(1, updatedOrder.getProducts().size());
     assertEquals("milk", updatedOrder.getProducts().get(0).getName());
@@ -183,9 +193,10 @@ public class OrderServiceTest {
     BuyerDTO buyerDTO = new BuyerDTO();
     buyerDTO.setId(1L);
 
-    when(orderRepository.findByBuyer(buyer)).thenReturn(List.of(order));
+    when(orderRepository.findByBuyerFirstNameAndLastName("Cosmin", "Chiriac")).thenReturn(List.of(order));
+    when(authentication.getPrincipal()).thenReturn("CosminChiriac");
 
-    List<Order> userOrders = systemUnderTest.findUserOrders(buyerDTO);
+    List<OrderDTO> userOrders = systemUnderTest.findUserOrders(authentication);
     assertEquals(1, userOrders.get(0).getProducts().size());
     assertEquals("milk", userOrders.get(0).getProducts().get(0).getName());
     assertEquals(1, userOrders.get(0).getProducts().get(0).getQuantity());
