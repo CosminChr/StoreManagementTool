@@ -28,7 +28,7 @@ public class BuyerService {
     return userDetailsService.loadUserByUsername(String.join("", buyer.getFirstName(), buyer.getLastName()));
   }
 
-  public Buyer findBuyerById(String username) {
+  public Buyer findBuyerByUsername(String username) {
     String[] names = username.split("(?=\\p{Upper})");
     return buyerRepository.findByFirstNameAndLastName(names[0], names[1])
         .orElseThrow(() -> new ProductNotFoundException(String.format("The user %s could not be found", username)));

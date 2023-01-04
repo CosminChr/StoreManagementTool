@@ -2,7 +2,6 @@ package com.assignment.storemanagementtool.service;
 
 import com.assignment.storemanagementtool.dto.OrderDTO;
 import com.assignment.storemanagementtool.dto.ProductDTO;
-import com.assignment.storemanagementtool.dto.BuyerDTO;
 import com.assignment.storemanagementtool.entity.Buyer;
 import com.assignment.storemanagementtool.entity.Order;
 import com.assignment.storemanagementtool.entity.ProductStock;
@@ -10,12 +9,12 @@ import com.assignment.storemanagementtool.exception.OrderNotFoundException;
 import com.assignment.storemanagementtool.exception.OutOfStockException;
 import com.assignment.storemanagementtool.exception.ProductNotFoundException;
 import com.assignment.storemanagementtool.mapper.OrderMapper;
-import com.assignment.storemanagementtool.mapper.BuyerMapper;
 import com.assignment.storemanagementtool.repository.OrderRepository;
 import com.assignment.storemanagementtool.repository.ProductStockRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.List;
@@ -30,7 +29,7 @@ public class OrderService {
   private BuyerService buyerService;
 
   public OrderDTO createOrder(OrderDTO orderDTO, Authentication auth) {
-    Buyer buyer = buyerService.findBuyerById(String.valueOf(auth.getPrincipal()));
+    Buyer buyer = buyerService.findBuyerByUsername(String.valueOf(auth.getPrincipal()));
     for (ProductDTO product : orderDTO.getProducts()) {
       ProductStock productStock = productStockRepository.findByName(product.getName())
           .orElseThrow(() -> new ProductNotFoundException(String.format("The product with name %s was not found", product.getName())));
@@ -70,7 +69,9 @@ public class OrderService {
     orderRepository.deleteById(id);
   }
 
-  public void deleteUserOrders(BuyerDTO buyerDTO) {
-    orderRepository.deleteByBuyer(BuyerMapper.mapDtoToEntity(buyerDTO));
+  @Transactional
+  public void deleteUserOrders(String username) {
+    Buyer buyer = buyerService.findBuyerByUsername(username);
+    orderRepository.deleteByBuyer(buyer);
   }
 }

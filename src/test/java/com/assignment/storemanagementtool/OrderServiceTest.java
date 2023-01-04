@@ -77,7 +77,7 @@ public class OrderServiceTest {
 
     when(productStockRepository.findByName("milk")).thenReturn(Optional.of(productStock));
     when(orderRepository.save(any())).thenReturn(order);
-    when(buyerService.findBuyerById(any())).thenReturn(buyer);
+    when(buyerService.findBuyerByUsername(any())).thenReturn(buyer);
 
     OrderDTO createdOrder = systemUnderTest.createOrder(orderDTO, authentication);
 
@@ -212,13 +212,10 @@ public class OrderServiceTest {
 
   @Test
   public void should_delete_user_orders() {
-    BuyerDTO buyerDTO = new BuyerDTO();
-    buyerDTO.setId(1L);
-
     Buyer buyer = new Buyer();
     buyer.setId(1L);
-
-    systemUnderTest.deleteUserOrders(buyerDTO);
+    when(buyerService.findBuyerByUsername("CosminChiriac")).thenReturn(buyer);
+    systemUnderTest.deleteUserOrders("CosminChiriac");
     verify(orderRepository).deleteByBuyer(buyer);
   }
 }
