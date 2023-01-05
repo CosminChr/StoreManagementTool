@@ -28,11 +28,11 @@ public class GlobalExceptionHandler {
 
       return handleOutOfStockException(outOfStockException, headers, status, request);
     } else if (ex instanceof UserNotFoundException userNotFoundException) {
-      HttpStatus status = HttpStatus.NOT_FOUND;
+      HttpStatus status = HttpStatus.BAD_REQUEST;
 
       return handleUserNotFoundException(userNotFoundException, headers, status, request);
     } else if (ex instanceof ProductNotFoundException productNotFoundException) {
-      HttpStatus status = HttpStatus.BAD_REQUEST;
+      HttpStatus status = HttpStatus.NOT_FOUND;
 
       return handleProductNotFoundException(productNotFoundException, headers, status, request);
     } else {
