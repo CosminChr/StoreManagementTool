@@ -2,7 +2,7 @@ package com.assignment.storemanagementtool.service;
 
 import com.assignment.storemanagementtool.dto.BuyerDTO;
 import com.assignment.storemanagementtool.entity.Buyer;
-import com.assignment.storemanagementtool.exception.ProductNotFoundException;
+import com.assignment.storemanagementtool.exception.UserNotFoundException;
 import com.assignment.storemanagementtool.mapper.BuyerMapper;
 import com.assignment.storemanagementtool.repository.BuyerRepository;
 import lombok.AllArgsConstructor;
@@ -31,6 +31,6 @@ public class BuyerService {
   public Buyer findBuyerByUsername(String username) {
     String[] names = username.split("(?=\\p{Upper})");
     return buyerRepository.findByFirstNameAndLastName(names[0], names[1])
-        .orElseThrow(() -> new ProductNotFoundException(String.format("The user %s could not be found", username)));
+        .orElseThrow(() -> new UserNotFoundException(String.format("The user %s could not be found", username)));
     }
 }

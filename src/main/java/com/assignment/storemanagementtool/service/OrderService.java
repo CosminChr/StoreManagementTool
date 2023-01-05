@@ -12,6 +12,7 @@ import com.assignment.storemanagementtool.mapper.OrderMapper;
 import com.assignment.storemanagementtool.repository.OrderRepository;
 import com.assignment.storemanagementtool.repository.ProductStockRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -66,12 +67,20 @@ public class OrderService {
   }
 
   public void deleteOrderById(Long id) {
-    orderRepository.deleteById(id);
+    try {
+      orderRepository.deleteById(id);
+    } catch (EmptyResultDataAccessException ex) {
+      throw new OrderNotFoundException(String.format("The order with id %s does not exist", id));
+    }
   }
 
   @Transactional
   public void deleteUserOrders(String username) {
     Buyer buyer = buyerService.findBuyerByUsername(username);
-    orderRepository.deleteByBuyer(buyer);
+    try {
+      orderRepository.deleteByBuyer(buyer);
+    } catch (EmptyResultDataAccessException ex) {
+      throw new OrderNotFoundException(String.format("The buyer %s does not have any orders", buyer.getUsername()));
+    }
   }
 }
