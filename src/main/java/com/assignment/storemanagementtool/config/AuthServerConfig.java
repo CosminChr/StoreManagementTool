@@ -44,7 +44,7 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
 
   @Bean
   public JwtAccessTokenConverter converter() {
-    var  converter = new JwtAccessTokenConverter();
+    var converter = new JwtAccessTokenConverter();
     converter.setSigningKey("secret");
     return converter;
   }

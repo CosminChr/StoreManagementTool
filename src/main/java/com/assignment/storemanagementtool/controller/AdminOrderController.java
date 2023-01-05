@@ -26,7 +26,7 @@ public class AdminOrderController {
 
   @PutMapping("/")
   public ResponseEntity<OrderDTO> updateOrder(@RequestBody OrderDTO orderDTO) {
-    OrderDTO order = orderService.updateOrder(orderDTO);
+    var order = orderService.updateOrder(orderDTO);
     log.info("The order with id {} was successfully updated", orderDTO.getId());
     return ResponseEntity.ok(order);
   }

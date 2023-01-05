@@ -24,7 +24,7 @@ public class BuyerService {
   private PasswordEncoder passwordEncoder;
 
   public UserDetails register(BuyerDTO buyerDTO) {
-    Buyer buyer = BuyerMapper.mapDtoToEntity(buyerDTO);
+    var buyer = BuyerMapper.mapDtoToEntity(buyerDTO);
     buyer.setPassword(passwordEncoder.encode(buyer.getPassword()));
     buyerRepository.save(buyer);
     ((UserDetailsManager)(userDetailsService)).createUser(buyer);

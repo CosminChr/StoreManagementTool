@@ -20,23 +20,23 @@ public class GlobalExceptionHandler {
     var headers = new HttpHeaders();
 
     if (ex instanceof OrderNotFoundException orderNotFound) {
-      HttpStatus status = HttpStatus.NOT_FOUND;
+      var status = HttpStatus.NOT_FOUND;
 
       return handleOrderNotFoundException(orderNotFound, headers, status, request);
     } else if (ex instanceof OutOfStockException outOfStockException) {
-      HttpStatus status = HttpStatus.NOT_FOUND;
+      var status = HttpStatus.NOT_FOUND;
 
       return handleOutOfStockException(outOfStockException, headers, status, request);
     } else if (ex instanceof UserNotFoundException userNotFoundException) {
-      HttpStatus status = HttpStatus.BAD_REQUEST;
+      var status = HttpStatus.BAD_REQUEST;
 
       return handleUserNotFoundException(userNotFoundException, headers, status, request);
     } else if (ex instanceof ProductNotFoundException productNotFoundException) {
-      HttpStatus status = HttpStatus.NOT_FOUND;
+      var status = HttpStatus.NOT_FOUND;
 
       return handleProductNotFoundException(productNotFoundException, headers, status, request);
     } else {
-      HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+      var status = HttpStatus.INTERNAL_SERVER_ERROR;
       return handleExceptionInternal(ex, null, headers, status, request);
     }
   }

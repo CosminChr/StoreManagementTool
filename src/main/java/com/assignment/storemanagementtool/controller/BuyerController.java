@@ -21,7 +21,7 @@ public class BuyerController {
 
   @PostMapping("/register")
   public ResponseEntity<UserDetails> register(@RequestBody BuyerDTO buyerDTO) {
-    UserDetails buyer = buyerService.register(buyerDTO);
+    var buyer = buyerService.register(buyerDTO);
     log.info("The buyer {} was successfully retrieved", buyer.getUsername());
     return ResponseEntity.status(201).body(buyer);
   }

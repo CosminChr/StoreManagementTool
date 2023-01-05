@@ -32,9 +32,9 @@ public class OrderService {
   private BuyerService buyerService;
 
   public OrderDTO createOrder(OrderDTO orderDTO, Authentication auth) {
-    Buyer buyer = buyerService.findBuyerByUsername(String.valueOf(auth.getPrincipal()));
+    var buyer = buyerService.findBuyerByUsername(String.valueOf(auth.getPrincipal()));
     for (ProductDTO product : orderDTO.getProducts()) {
-      ProductStock productStock = productStockRepository.findByName(product.getName())
+      var productStock = productStockRepository.findByName(product.getName())
           .orElseThrow(() -> {
             log.info("The product with name {}} was not found", product.getName());
             return new ProductNotFoundException(String.format("The product with name %s was not found", product.getName()));
@@ -48,9 +48,9 @@ public class OrderService {
   }
 
   public OrderDTO updateOrder(OrderDTO orderDTO) {
-    Order orderToUpdate = findOrderById(orderDTO.getId());
+    var orderToUpdate = findOrderById(orderDTO.getId());
     for (ProductDTO product : orderDTO.getProducts()) {
-      ProductStock productStock = productStockRepository.findByName(product.getName())
+      var productStock = productStockRepository.findByName(product.getName())
           .orElseThrow(() -> {
             log.info("The product with name {}} was not found", product.getName());
             return new ProductNotFoundException(String.format("The product with name %s was not found", product.getName()));
@@ -90,7 +90,7 @@ public class OrderService {
 
   @Transactional
   public void deleteUserOrders(String username) {
-    Buyer buyer = buyerService.findBuyerByUsername(username);
+    var buyer = buyerService.findBuyerByUsername(username);
     try {
       orderRepository.deleteByBuyer(buyer);
     } catch (EmptyResultDataAccessException ex) {

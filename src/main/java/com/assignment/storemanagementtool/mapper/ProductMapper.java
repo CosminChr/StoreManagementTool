@@ -7,7 +7,7 @@ import com.assignment.storemanagementtool.entity.Product;
 public class ProductMapper {
 
   public static Product mapDtoToEntity(ProductDTO productDTO) {
-    Product product = new Product();
+    var product = new Product();
     product.setId(productDTO.getId());
     product.setName(productDTO.getName());
     product.setPrice(productDTO.getPrice());
@@ -16,7 +16,7 @@ public class ProductMapper {
   }
 
   public static ProductDTO mapEntityToDto(Product product) {
-    ProductDTO productDto = new ProductDTO();
+    var productDto = new ProductDTO();
     productDto.setId(product.getId());
     productDto.setName(product.getName());
     productDto.setPrice(product.getPrice());

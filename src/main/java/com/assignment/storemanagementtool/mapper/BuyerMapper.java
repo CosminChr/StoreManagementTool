@@ -6,7 +6,7 @@ import com.assignment.storemanagementtool.entity.Buyer;
 public class BuyerMapper {
 
   public static Buyer mapDtoToEntity(BuyerDTO buyerDTO) {
-    Buyer buyer = new Buyer();
+    var buyer = new Buyer();
     buyer.setId(buyerDTO.getId());
     buyer.setEmail(buyerDTO.getEmail());
     buyer.setFirstName(buyerDTO.getFirstName());

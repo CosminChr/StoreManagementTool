@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 public class OrderMapper {
 
   public static Order mapDtoToEntity(OrderDTO orderDTO, Buyer buyer) {
-    Order order = new Order();
+    var order = new Order();
     order.setOrderTime(LocalDateTime.now());
     order.setProducts(orderDTO.getProducts().stream().map(ProductMapper::mapDtoToEntity).collect(Collectors.toList()));
     order.setBuyer(buyer);
@@ -20,7 +20,7 @@ public class OrderMapper {
   }
 
   public static OrderDTO mapEntityToDto(Order order) {
-    OrderDTO orderDTO = new OrderDTO();
+    var orderDTO = new OrderDTO();
     orderDTO.setId(order.getId());
     orderDTO.setOrderTime(order.getOrderTime());
     orderDTO.setProducts(order.getProducts().stream().map(ProductMapper::mapEntityToDto).collect(Collectors.toList()));
