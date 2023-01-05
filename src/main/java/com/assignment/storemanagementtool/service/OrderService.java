@@ -9,6 +9,7 @@ import com.assignment.storemanagementtool.exception.OrderNotFoundException;
 import com.assignment.storemanagementtool.exception.OutOfStockException;
 import com.assignment.storemanagementtool.exception.ProductNotFoundException;
 import com.assignment.storemanagementtool.mapper.OrderMapper;
+import com.assignment.storemanagementtool.mapper.ProductMapper;
 import com.assignment.storemanagementtool.repository.OrderRepository;
 import com.assignment.storemanagementtool.repository.ProductStockRepository;
 import lombok.AllArgsConstructor;
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
@@ -58,6 +60,10 @@ public class OrderService {
       if (productStock.getQuantity() < product.getQuantity()) {
         log.info("The order could not be created because the product {} is out of stock", product.getName());
         throw new OutOfStockException(String.format("The order could not be updated because the product %s is out of stock", product.getName()));
+      } else {
+        orderToUpdate.setProducts(orderDTO.getProducts().stream()
+            .map(ProductMapper::mapDtoToEntity)
+            .collect(Collectors.toList()));
       }
     }
 
