@@ -24,14 +24,14 @@ public class BuyerOrderController {
 
   private OrderService orderService;
 
-  @PostMapping("/")
+  @PostMapping("")
   public ResponseEntity<OrderDTO> createOrder(@RequestBody OrderDTO orderDTO, Authentication auth) {
     var order = orderService.createOrder(orderDTO, auth);
     log.info("The order with id {} was successfully created for user {}", order.getId(), auth.getPrincipal());
     return ResponseEntity.status(201).body(order);
   }
 
-  @GetMapping("/")
+  @GetMapping("")
   public ResponseEntity<List<OrderDTO>> findUserOrders(Authentication auth) {
     var buyerOrders = orderService.findBuyerOrders(auth);
     log.info("The orders {} were successfully retrieved", buyerOrders);

@@ -24,7 +24,7 @@ public class AdminOrderController {
 
   private OrderService orderService;
 
-  @PutMapping("/")
+  @PutMapping("")
   public ResponseEntity<OrderDTO> updateOrder(@RequestBody OrderDTO orderDTO) {
     var order = orderService.updateOrder(orderDTO);
     log.info("The order with id {} was successfully updated", orderDTO.getId());
@@ -38,7 +38,7 @@ public class AdminOrderController {
     return ResponseEntity.ok("The order was successfully deleted");
   }
 
-  @DeleteMapping("/")
+  @DeleteMapping("")
   public ResponseEntity<String> deleteUserOrders(@QueryParam("usermame") String username) {
     orderService.deleteUserOrders(username);
     log.info("The orders were successfully deleted");
