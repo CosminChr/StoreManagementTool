@@ -110,14 +110,23 @@ public class OrderServiceTest {
 
   @Test
   public void should_update_order() {
-    Order order = new Order();
-    order.setId(1L);
-    order.setOrderTime(LocalDateTime.now());
+    Order orderToUpdate = new Order();
+    orderToUpdate.setId(1L);
+    orderToUpdate.setOrderTime(LocalDateTime.now());
     Product product = new Product();
     product.setPrice(BigDecimal.valueOf(100));
     product.setName("milk");
     product.setQuantity(1);
-    order.setProducts(List.of(product));
+    orderToUpdate.setProducts(List.of(product));
+
+    Order order2 = new Order();
+    order2.setId(1L);
+    order2.setOrderTime(LocalDateTime.now());
+    Product product2 = new Product();
+    product2.setPrice(BigDecimal.valueOf(200));
+    product2.setName("milk");
+    product2.setQuantity(2);
+    order2.setProducts(List.of(product2));
 
     OrderDTO orderDTO = new OrderDTO();
     orderDTO.setOrderTime(LocalDateTime.now());
@@ -132,11 +141,9 @@ public class OrderServiceTest {
     productStock.setId(1L);
     productStock.setQuantity(3);
     productStock.setName("milk");
-    when(orderRepository.findById(1L)).thenReturn(Optional.of(order));
+    when(orderRepository.findById(1L)).thenReturn(Optional.of(orderToUpdate));
     when(productStockRepository.findByName("milk")).thenReturn(Optional.of(productStock));
-    order.getProducts().get(0).setQuantity(2);
-    order.getProducts().get(0).setPrice(BigDecimal.valueOf(200));
-    when(orderRepository.save(any())).thenReturn(order);
+    when(orderRepository.save(any())).thenReturn(order2);
     OrderDTO updatedOrder = systemUnderTest.updateOrder(orderDTO);
 
     assertEquals(1, updatedOrder.getProducts().size());
