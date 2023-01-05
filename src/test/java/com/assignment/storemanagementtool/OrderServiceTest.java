@@ -196,7 +196,7 @@ public class OrderServiceTest {
     when(orderRepository.findByBuyerFirstNameAndLastName("Cosmin", "Chiriac")).thenReturn(List.of(order));
     when(authentication.getPrincipal()).thenReturn("CosminChiriac");
 
-    List<OrderDTO> userOrders = systemUnderTest.findUserOrders(authentication);
+    List<OrderDTO> userOrders = systemUnderTest.findBuyerOrders(authentication);
     assertEquals(1, userOrders.get(0).getProducts().size());
     assertEquals("milk", userOrders.get(0).getProducts().get(0).getName());
     assertEquals(1, userOrders.get(0).getProducts().get(0).getQuantity());

@@ -12,6 +12,7 @@ import com.assignment.storemanagementtool.mapper.OrderMapper;
 import com.assignment.storemanagementtool.repository.OrderRepository;
 import com.assignment.storemanagementtool.repository.ProductStockRepository;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ import java.util.stream.Stream;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class OrderService {
 
   private OrderRepository orderRepository;
@@ -33,8 +35,12 @@ public class OrderService {
     Buyer buyer = buyerService.findBuyerByUsername(String.valueOf(auth.getPrincipal()));
     for (ProductDTO product : orderDTO.getProducts()) {
       ProductStock productStock = productStockRepository.findByName(product.getName())
-          .orElseThrow(() -> new ProductNotFoundException(String.format("The product with name %s was not found", product.getName())));
+          .orElseThrow(() -> {
+            log.info("The product with name {}} was not found", product.getName());
+            return new ProductNotFoundException(String.format("The product with name %s was not found", product.getName()));
+          });
       if (productStock.getQuantity() < product.getQuantity()) {
+        log.info("The order could not be created because the product {} is out of stock", product.getName());
         throw new OutOfStockException(String.format("The order could not be created because the product %s is out of stock", product.getName()));
       }
     }
@@ -45,8 +51,12 @@ public class OrderService {
     Order orderToUpdate = findOrderById(orderDTO.getId());
     for (ProductDTO product : orderDTO.getProducts()) {
       ProductStock productStock = productStockRepository.findByName(product.getName())
-          .orElseThrow(() -> new ProductNotFoundException(String.format("The product with name %s was not found", product)));
+          .orElseThrow(() -> {
+            log.info("The product with name {}} was not found", product.getName());
+            return new ProductNotFoundException(String.format("The product with name %s was not found", product.getName()));
+          });
       if (productStock.getQuantity() < product.getQuantity()) {
+        log.info("The order could not be created because the product {} is out of stock", product.getName());
         throw new OutOfStockException(String.format("The order could not be updated because the product %s is out of stock", product.getName()));
       }
     }
@@ -56,10 +66,13 @@ public class OrderService {
 
   public Order findOrderById(Long id) {
     return orderRepository.findById(id)
-        .orElseThrow(() -> new OrderNotFoundException(String.format("The order with id %s does not exist", id)));
+        .orElseThrow(() -> {
+          log.info("The order with id {} does not exist", id);
+          return new OrderNotFoundException(String.format("The order with id %s does not exist", id));
+        });
   }
 
-  public List<OrderDTO> findUserOrders(Authentication auth) {
+  public List<OrderDTO> findBuyerOrders(Authentication auth) {
     String[] names = ((String)auth.getPrincipal()).split("(?=\\p{Upper})");
     return Stream.of(orderRepository.findByBuyerFirstNameAndLastName(names[0], names[1]))
         .flatMap(Collection::stream)
@@ -70,6 +83,7 @@ public class OrderService {
     try {
       orderRepository.deleteById(id);
     } catch (EmptyResultDataAccessException ex) {
+      log.info("The order with id {} does not exist", id);
       throw new OrderNotFoundException(String.format("The order with id %s does not exist", id));
     }
   }
@@ -80,6 +94,7 @@ public class OrderService {
     try {
       orderRepository.deleteByBuyer(buyer);
     } catch (EmptyResultDataAccessException ex) {
+      log.info("The buyer {} does not have any orders", buyer.getUsername());
       throw new OrderNotFoundException(String.format("The buyer %s does not have any orders", buyer.getUsername()));
     }
   }
