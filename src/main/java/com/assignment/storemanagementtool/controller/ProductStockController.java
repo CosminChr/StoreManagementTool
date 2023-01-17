@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.ws.rs.QueryParam;
 
 @RestController
 @RequestMapping("/stock")
@@ -25,7 +25,7 @@ public class ProductStockController {
   private ProductStockService productStockService;
 
   @GetMapping("")
-  public ResponseEntity<ProductStockDTO> findStockByName(@QueryParam("name") String name) {
+  public ResponseEntity<ProductStockDTO> findStockByName(@RequestParam("name") String name) {
     var productStock = productStockService.findStockByName(name);
     log.info("The product stock {} was successfully retrieved", productStock.getName());
     return ResponseEntity.ok(productStock);
