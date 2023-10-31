@@ -56,12 +56,12 @@
 					"basic": [
 						{
 							"key": "password",
-							"value": "ing-secret",
+							"value": "secret",
 							"type": "string"
 						},
 						{
 							"key": "username",
-							"value": "ing-client",
+							"value": "client",
 							"type": "string"
 						}
 					]
@@ -121,12 +121,12 @@
 					"basic": [
 						{
 							"key": "password",
-							"value": "ing-secret",
+							"value": "secret",
 							"type": "string"
 						},
 						{
 							"key": "username",
-							"value": "ing-client",
+							"value": "client",
 							"type": "string"
 						}
 					]
@@ -134,7 +134,7 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/oauth/token?grant_type=password&username=admin&password=ingpassword&scope=read",
+					"raw": "http://localhost:8080/oauth/token?grant_type=password&username=admin&password=password&scope=read",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -155,7 +155,7 @@
 						},
 						{
 							"key": "password",
-							"value": "ingpassword"
+							"value": "password"
 						},
 						{
 							"key": "scope",
