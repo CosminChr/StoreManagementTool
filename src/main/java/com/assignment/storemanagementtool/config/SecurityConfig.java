@@ -21,7 +21,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   public UserDetailsService userDetailsService() {
     var uds = new InMemoryUserDetailsManager();
     var admin = User.withUsername("admin")
-        .password(passwordEncoder().encode("ingpassword"))
+        .password(passwordEncoder().encode("password"))
         .roles("ADMIN")
         .build();
     var user = User.withUsername("user")
