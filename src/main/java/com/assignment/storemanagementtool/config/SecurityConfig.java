@@ -24,8 +24,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .password(passwordEncoder().encode("ingpassword"))
         .roles("ADMIN")
         .build();
-    var user = User.withUsername("ing")
-        .password(passwordEncoder().encode("ingpassword"))
+    var user = User.withUsername("user")
+        .password(passwordEncoder().encode("password"))
         .roles("BUYER")
         .build();
 
