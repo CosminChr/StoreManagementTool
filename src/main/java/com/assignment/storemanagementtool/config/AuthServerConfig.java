@@ -24,8 +24,8 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
   @Override
   public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
     clients.inMemory()
-        .withClient("ing-client")
-        .secret(passwordEncoder.encode("ing-secret"))
+        .withClient("client")
+        .secret(passwordEncoder.encode("secret"))
         .authorizedGrantTypes("password")
         .scopes("read");
   }
